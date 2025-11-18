@@ -1,0 +1,7 @@
+{
+  "name": "mindfocus",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
