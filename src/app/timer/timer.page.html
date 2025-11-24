@@ -1,0 +1,110 @@
+<ion-header [translucent]="true">
+  <ion-toolbar [color]="sessionTypeColor">
+    <ion-button slot="start" fill="clear" (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
+    <ion-title class="ion-text-center">
+      <strong>{{ sessionTypeText }}</strong>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="timer-content">
+  <div class="timer-container">
+    <!-- Temporizador circular -->
+    <div class="circular-timer">
+      <svg class="timer-svg" viewBox="0 0 200 200">
+        <!-- Círculo de fondo -->
+        <circle
+          class="timer-circle-bg"
+          cx="100"
+          cy="100"
+          r="85"
+          fill="none"
+          stroke-width="12"
+        />
+        <!-- Círculo de progreso -->
+        <circle
+          class="timer-circle-progress"
+          cx="100"
+          cy="100"
+          r="85"
+          fill="none"
+          stroke-width="12"
+          [attr.stroke-dasharray]="534"
+          [attr.stroke-dashoffset]="534 - (534 * progress / 100)"
+          [class.enfoque]="timerState.currentType === 'enfoque'"
+          [class.descanso]="timerState.currentType === 'descanso'"
+        />
+      </svg>
+
+      <!-- Tiempo en el centro -->
+      <div class="timer-display">
+        <div class="time-text">{{ displayTime }}</div>
+        <div class="time-label">restantes</div>
+      </div>
+    </div>
+
+    <!-- Información de la sesión -->
+    <div class="session-info">
+      <div class="session-counter">
+        <span>Sesión {{ timerState.sessionNumber }} de 4 completadas</span>
+      </div>
+      <div class="session-dots">
+        <span
+          *ngFor="let i of [1,2,3,4]"
+          class="dot"
+          [class.completed]="i <= timerState.completedSessions">
+        </span>
+      </div>
+    </div>
+
+    <!-- Controles -->
+    <div class="controls">
+      <ion-button
+        *ngIf="!timerState.isPaused && timerState.isRunning"
+        class="control-btn pause-btn"
+        (click)="pauseTimer()"
+        shape="round"
+        size="large">
+        <ion-icon slot="icon-only" name="pause"></ion-icon>
+      </ion-button>
+
+      <ion-button
+        *ngIf="timerState.isPaused"
+        class="control-btn play-btn"
+        (click)="resumeTimer()"
+        shape="round"
+        size="large"
+        color="success">
+        <ion-icon slot="icon-only" name="play"></ion-icon>
+      </ion-button>
+
+      <ion-button
+        class="control-btn restart-btn"
+        (click)="restartTimer()"
+        shape="round"
+        size="large"
+        fill="outline">
+        <ion-icon slot="icon-only" name="refresh"></ion-icon>
+      </ion-button>
+
+      <ion-button
+        class="control-btn stop-btn"
+        (click)="stopTimer()"
+        shape="round"
+        size="large"
+        fill="outline"
+        color="danger">
+        <ion-icon slot="icon-only" name="square"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Etiquetas de controles -->
+    <div class="control-labels">
+      <span>{{ timerState.isPaused ? 'Reanudar' : 'Pausar' }}</span>
+      <span>Reiniciar</span>
+      <span>Detener</span>
+    </div>
+  </div>
+</ion-content>

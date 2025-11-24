@@ -1,17 +1,63 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 3
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">
+      <strong>Historial</strong>
     </ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="selectedFilter" (ionChange)="onFilterChange($event)">
+      <ion-segment-button value="all">
+        <ion-label>Todo</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="today">
+        <ion-label>Hoy</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="week">
+        <ion-label>Esta semana</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="history-container">
+    <!-- Mensaje cuando no hay sesiones -->
+    <div *ngIf="filteredSessions.length === 0" class="empty-state">
+      <ion-icon name="calendar"></ion-icon>
+      <h2>No hay sesiones registradas</h2>
+      <p>Completa tu primera sesión de enfoque para verla aquí</p>
+    </div>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+    <!-- Lista de sesiones agrupadas por fecha -->
+    <div *ngIf="filteredSessions.length > 0" class="sessions-list">
+      <div *ngFor="let group of groupSessionsByDate()" class="date-group">
+        <div class="date-header">
+          <ion-icon name="calendar"></ion-icon>
+          <span>{{ formatDate(group.sessions[0].date) }} - {{ group.sessions[0].date | date: 'd MMM yyyy' }}</span>
+        </div>
+
+        <ion-list class="session-items">
+          <ion-item *ngFor="let session of group.sessions" class="session-item">
+            <ion-icon
+              slot="start"
+              [name]="getSessionIcon(session.type)"
+              [color]="getSessionColor(session.type)"
+              class="session-icon">
+            </ion-icon>
+
+            <ion-label>
+              <h3>{{ session.startTime }}</h3>
+              <p>{{ session.duration }} min</p>
+            </ion-label>
+
+            <ion-badge
+              slot="end"
+              [color]="getSessionColor(session.type)">
+              {{ session.type === 'enfoque' ? 'Enfoque' : 'Descanso' }}
+            </ion-badge>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+  </div>
 </ion-content>

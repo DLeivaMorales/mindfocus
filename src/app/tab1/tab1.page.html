@@ -1,17 +1,89 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">
+      <strong>MindFocus</strong>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="config-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="section-title">
+          <ion-icon name="settings"></ion-icon>
+          Configura tu sesión
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p class="subtitle">Personaliza tus tiempos de trabajo y descanso</p>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+        <div class="time-config">
+          <div class="time-item">
+            <ion-label>
+              <ion-icon name="timer-outline"></ion-icon>
+              Tiempo de enfoque
+            </ion-label>
+            <div class="time-display">{{ config.focusTime }} minutos</div>
+            <ion-range
+              [min]="5"
+              [max]="60"
+              [step]="5"
+              [value]="config.focusTime"
+              (ionChange)="onFocusTimeChange($event)"
+              color="primary"
+              [pin]="true">
+            </ion-range>
+          </div>
+
+          <div class="time-item">
+            <ion-label>
+              <ion-icon name="cafe-outline"></ion-icon>
+              Tiempo de descanso
+            </ion-label>
+            <div class="time-display">{{ config.breakTime }} minutos</div>
+            <ion-range
+              [min]="1"
+              [max]="30"
+              [step]="1"
+              [value]="config.breakTime"
+              (ionChange)="onBreakTimeChange($event)"
+              color="secondary"
+              [pin]="true">
+            </ion-range>
+          </div>
+        </div>
+
+        <div class="presets">
+          <p class="presets-label">Presets rápidos:</p>
+          <div class="preset-buttons">
+            <ion-button
+              fill="outline"
+              size="small"
+              (click)="setPreset(25, 5)"
+              [disabled]="isTimerRunning">
+              25/5<br><span class="preset-label">Clásico</span>
+            </ion-button>
+            <ion-button
+              fill="outline"
+              size="small"
+              (click)="setPreset(50, 10)"
+              [disabled]="isTimerRunning">
+              50/10<br><span class="preset-label">Extendido</span>
+            </ion-button>
+          </div>
+        </div>
+
+        <ion-button
+          expand="block"
+          size="large"
+          class="start-button"
+          (click)="startSession()"
+          [disabled]="isTimerRunning">
+          <ion-icon slot="start" name="play-circle"></ion-icon>
+          INICIAR SESIÓN
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

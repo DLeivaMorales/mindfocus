@@ -1,17 +1,90 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 2
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">
+      <strong>Estadísticas</strong>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="stats-container">
+    <!-- Resumen del día -->
+    <ion-card class="summary-card">
+      <ion-card-content>
+        <div class="today-summary">
+          <div class="circular-progress">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" class="progress-bg" />
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                class="progress-circle"
+                [style.stroke-dashoffset]="251 - (251 * (todayStats?.totalMinutes || 0) / 1500)"
+              />
+            </svg>
+            <div class="time-center">
+              <div class="time-value">{{ formatHours(todayStats?.totalMinutes || 0) }}</div>
+              <div class="time-label">restantes</div>
+            </div>
+          </div>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+          <div class="summary-info">
+            <div class="summary-item">
+              <div class="summary-label">Tiempo total</div>
+              <div class="summary-value">{{ formatHours(weeklyStats?.totalMinutes || 0) }}</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-label">Sesiones</div>
+              <div class="summary-value">{{ todayStats?.sessions || 0 }}</div>
+            </div>
+          </div>
+        </div>
+
+        <ion-button
+          expand="block"
+          class="session-btn"
+          (click)="startSession()">
+          <ion-icon slot="start" name="play-circle"></ion-icon>
+          Sesión de Enfoque
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Gráfico de barras semanal -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="section-title">
+          <ion-icon name="stats-chart"></ion-icon>
+          Tiempo por día
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="chart-container">
+          <div class="chart">
+            <div class="bar-wrapper" *ngFor="let day of weekDays">
+              <div class="bar-container">
+                <div
+                  class="bar"
+                  [class]="getBarClass(day)"
+                  [style.height.%]="getBarHeight(day)">
+                  <span class="bar-value" *ngIf="weeklyStats && weeklyStats.days[day] > 0">
+                    {{ weeklyStats.days[day].toFixed(0) }}h
+                  </span>
+                </div>
+              </div>
+              <div class="bar-label">{{ day }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="week-summary">
+          <ion-badge color="warning">
+            <ion-icon name="flame"></ion-icon>
+            Racha actual: {{ weeklyStats?.currentStreak || 0 }} días
+          </ion-badge>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

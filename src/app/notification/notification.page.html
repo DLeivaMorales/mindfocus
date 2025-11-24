@@ -1,0 +1,46 @@
+<ion-content [fullscreen]="true" class="notification-content">
+  <div class="notification-container">
+    <div class="success-icon">
+      <ion-icon name="checkmark-circle"></ion-icon>
+    </div>
+
+    <h1 class="title">¡Sesión Completada!</h1>
+    <p class="message">Has completado tu sesión de enfoque exitosamente.</p>
+
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-value">+25 min</div>
+        <div class="stat-label">Tiempo enfocado</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <ion-button
+        expand="block"
+        size="large"
+        class="action-btn primary-action"
+        (click)="startBreak()">
+        Iniciar Descanso
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        size="large"
+        fill="outline"
+        class="action-btn"
+        (click)="startNewFocusSession()">
+        Nuevo Ciclo de Enfoque
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        size="large"
+        fill="clear"
+        class="action-btn home-btn"
+        (click)="goToHome()">
+        <ion-icon slot="start" name="home"></ion-icon>
+        Volver al Inicio
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
