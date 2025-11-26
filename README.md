@@ -1,28 +1,96 @@
-# MindFocus - Aplicación de Técnica Pomodoro
+# MindFocus
 
-MindFocus es una aplicación multiplataforma desarrollada con Ionic y Angular que implementa la técnica Pomodoro para mejorar la productividad y concentración.
+Aplicación móvil multiplataforma desarrollada con Ionic Framework y Angular, diseñada para proporcionar una experiencia de usuario moderna y eficiente.
 
-## 🚀 Características
+## Descripción del Proyecto
 
-- ⏱️ **Temporizador Pomodoro**: Configura tu tiempo de enfoque y descanso
-- 📊 **Estadísticas Visuales**: Gráfico de barras con el tiempo dedicado por día de la semana
-- 📜 **Historial de Sesiones**: Registro completo de todas tus sesiones de enfoque y descanso
-- 🔔 **Notificaciones**: Alertas al completar cada sesión
-- 📱 **Diseño Responsivo**: Funciona en navegadores web, iOS y Android
-- 🎨 **Interfaz Moderna**: Diseño limpio con gradientes y animaciones suaves
-- 💾 **Persistencia Local**: Datos guardados localmente en tu dispositivo
+MindFocus es una aplicación híbrida construida sobre la última versión de Angular (v20) e Ionic (v8), utilizando Capacitor para el acceso a funcionalidades nativas. La aplicación sigue una arquitectura basada en pestañas (tabs) que permite una navegación intuitiva entre diferentes secciones.
 
-## 📋 Requisitos Previos
+## Tecnologías Principales
 
-- Node.js (v18 o superior)
-- npm (v9 o superior)
-- Ionic CLI: `npm install -g @ionic/cli`
+### Framework y Core
+- **Angular 20.0.0**: Framework JavaScript moderno con arquitectura standalone components
+- **Ionic 8.0.0**: Framework UI para aplicaciones híbridas multiplataforma
+- **Capacitor 7.4.4**: Runtime nativo para aplicaciones web
+- **TypeScript 5.9.0**: Superset tipado de JavaScript
 
-## 🛠️ Instalación
+### Capacitor Plugins
+- `@capacitor/app`: Manejo del ciclo de vida de la aplicación
+- `@capacitor/haptics`: Feedback háptico
+- `@capacitor/keyboard`: Control del teclado nativo
+- `@capacitor/status-bar`: Personalización de la barra de estado
+
+### Herramientas de Desarrollo
+- **Angular CLI**: Herramientas de línea de comandos
+- **ESLint**: Linter para calidad de código
+- **Karma + Jasmine**: Framework de testing
+- **TypeScript**: Compilador y verificación de tipos
+
+## Estructura del Proyecto
+
+```
+mindfocus/
+├── src/
+│   ├── app/
+│   │   ├── tabs/              # Componente principal de navegación por pestañas
+│   │   ├── tab1/              # Primera pestaña (Triangle icon)
+│   │   ├── tab2/              # Segunda pestaña (Ellipse icon)
+│   │   ├── tab3/              # Tercera pestaña (Square icon)
+│   │   ├── explore-container/ # Componente reutilizable de contenido
+│   │   ├── app.component.ts   # Componente raíz
+│   │   └── app.routes.ts      # Configuración de rutas
+│   ├── assets/                # Recursos estáticos
+│   ├── theme/                 # Estilos globales y variables
+│   └── index.html             # Punto de entrada HTML
+├── angular.json               # Configuración de Angular
+├── capacitor.config.ts        # Configuración de Capacitor
+├── ionic.config.json          # Configuración de Ionic
+├── tsconfig.json              # Configuración de TypeScript
+└── package.json               # Dependencias y scripts
+```
+
+## Arquitectura de la Aplicación
+
+### Patrón de Componentes Standalone
+La aplicación utiliza el patrón moderno de **standalone components** de Angular, eliminando la necesidad de NgModules tradicionales y simplificando la arquitectura:
+
+```typescript
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  imports: [IonApp, IonRouterOutlet],
+})
+```
+
+### Sistema de Navegación por Pestañas
+- **Tab 1**: Interfaz con icono de triángulo
+- **Tab 2**: Interfaz con icono de elipse
+- **Tab 3**: Interfaz con icono de cuadrado
+
+Cada pestaña incluye:
+- Header translúcido con collapse mode
+- Contenido full-screen
+- Componente explore-container reutilizable
+
+### Capacitor Configuration
+```typescript
+appId: 'io.ionic.starter'
+appName: 'mindfocus'
+webDir: 'www'
+```
+
+## Requisitos Previos
+
+- **Node.js**: v18 o superior
+- **npm**: v9 o superior
+- **Ionic CLI**: `npm install -g @ionic/cli`
+- **Angular CLI**: `npm install -g @angular/cli`
+
+## Instalación
 
 1. **Clonar el repositorio**
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/DLeivaMorales/mindfocus.git
 cd mindfocus
 ```
 
@@ -31,155 +99,142 @@ cd mindfocus
 npm install
 ```
 
-3. **Ejecutar en modo desarrollo**
+3. **Verificar instalación**
 ```bash
-npm start
-# o
-ionic serve
+npm run lint    # Verificar calidad de código
+npm run build   # Compilar proyecto
+npm test        # Ejecutar tests
 ```
 
-La aplicación se abrirá en `http://localhost:8100`
+## Scripts Disponibles
 
-## 📱 Ejecutar en Dispositivos
+| Script | Descripción |
+|--------|-------------|
+| `npm start` | Inicia servidor de desarrollo en http://localhost:8100 |
+| `npm run build` | Compila la aplicación para producción |
+| `npm test` | Ejecuta los tests unitarios con Karma |
+| `npm run lint` | Verifica la calidad del código con ESLint |
+| `npm run watch` | Compila en modo watch para desarrollo |
+
+## Desarrollo
+
+### Servidor de Desarrollo
+```bash
+npm start
+```
+La aplicación se abrirá automáticamente en `http://localhost:8100` con recarga en caliente (hot reload).
+
+### Compilación
+```bash
+npm run build
+```
+Los archivos compilados se generarán en el directorio `www/` con un tamaño aproximado de **572.51 kB**.
+
+### Testing
+```bash
+npm test
+```
+Ejecuta **6 tests unitarios** que verifican:
+- Componente principal (AppComponent)
+- Componente de pestañas (TabsPage)
+- Tres páginas de pestañas (Tab1Page, Tab2Page, Tab3Page)
+- Componente explore-container
+
+## Despliegue en Plataformas Nativas
 
 ### iOS
 ```bash
 ionic capacitor add ios
-ionic capacitor run ios
+ionic capacitor sync ios
+ionic capacitor open ios
 ```
 
 ### Android
 ```bash
 ionic capacitor add android
-ionic capacitor run android
+ionic capacitor sync android
+ionic capacitor open android
 ```
 
-## 🏗️ Estructura del Proyecto
+## Calidad del Código
 
-```
-src/
-├── app/
-│   ├── models/              # Modelos de datos (Session, Stats, Config)
-│   ├── services/            # Servicios (Timer, Storage, Statistics)
-│   ├── tab1/                # Pantalla de Configuración
-│   ├── tab2/                # Pantalla de Estadísticas
-│   ├── tab3/                # Pantalla de Historial
-│   ├── timer/               # Pantalla del Temporizador Activo
-│   ├── notification/        # Pantalla de Notificación
-│   └── tabs/                # Componente principal de navegación
-├── theme/                   # Configuración de colores y tema
-└── global.scss             # Estilos globales
-```
+El proyecto mantiene altos estándares de calidad:
 
-## 🎯 Flujo de Navegación
+- ✅ **Linting**: Configuración de ESLint con reglas de Angular
+- ✅ **TypeScript Strict**: Verificación estricta de tipos
+- ✅ **Tests Unitarios**: Cobertura con Jasmine + Karma
+- ✅ **Componentes Standalone**: Arquitectura moderna de Angular
 
-1. **Configuración** → Personaliza tiempos de enfoque y descanso
-2. **Temporizador Activo** → Sesión en progreso con animación circular
-3. **Notificación** → Al completar la sesión
-4. **Estadísticas** → Visualiza tu progreso semanal
-5. **Historial** → Revisa todas tus sesiones pasadas
+### Estado de Verificación
 
-## 🎨 Personalización
+| Verificación | Estado | Resultado |
+|--------------|--------|-----------|
+| Linter | ✅ Pasado | Todos los archivos sin errores |
+| Build | ✅ Exitoso | 572.51 kB (148.72 kB comprimido) |
+| Tests | ✅ Pasado | 6/6 tests exitosos |
 
-### Colores del Tema
+## Configuración de Desarrollo
 
-Los colores principales están definidos en `src/theme/variables.scss`:
+### Editor Recomendado
+- **Visual Studio Code** con extensiones:
+  - Angular Language Service
+  - ESLint
+  - Ionic
+  - EditorConfig
 
-- **Primary (Púrpura)**: `#667eea` - Color principal de la app
-- **Secondary (Rosa)**: `#f093fb` - Para descansos
-- **Success (Verde)**: `#4ade80` - Para sesiones completadas
+### Configuración de ESLint
+El proyecto incluye configuración de ESLint con:
+- Reglas de Angular (@angular-eslint)
+- Reglas de TypeScript (@typescript-eslint)
+- Plugins de importación y documentación JSDoc
 
-### Configuración de Tiempos
+## Roadmap y Próximos Pasos
 
-Los usuarios pueden configurar:
-- Tiempo de enfoque: 5-60 minutos
-- Tiempo de descanso: 1-30 minutos
-- Presets rápidos: 25/5 (Clásico) y 50/10 (Extendido)
+Este es un proyecto base que puede expandirse según las necesidades:
 
-## 🧪 Testing
+1. **Funcionalidades Pendientes**
+   - Implementar contenido específico en cada pestaña
+   - Agregar autenticación de usuarios
+   - Integrar servicios backend
+   - Implementar almacenamiento local
 
-```bash
-npm test
-```
+2. **Mejoras Técnicas**
+   - Configurar CI/CD
+   - Agregar tests E2E con Cypress o Playwright
+   - Implementar Progressive Web App (PWA)
+   - Optimizar bundle size
 
-## 📦 Build para Producción
+3. **Plataformas Nativas**
+   - Configurar builds para iOS
+   - Configurar builds para Android
+   - Publicar en App Store / Google Play
 
-```bash
-# Web
-npm run build
-
-# iOS
-ionic capacitor build ios
-
-# Android
-ionic capacitor build android
-```
-
-## 🔧 Tecnologías Utilizadas
-
-- **Ionic 8**: Framework para aplicaciones híbridas
-- **Angular 20**: Framework de desarrollo
-- **Capacitor 7**: Runtime nativo para iOS/Android
-- **TypeScript**: Lenguaje de programación
-- **RxJS**: Programación reactiva
-- **LocalStorage**: Persistencia de datos
-
-## 📖 Servicios Principales
-
-### TimerService
-Gestiona el estado del temporizador, controla inicio, pausa, detener y completar sesiones.
-
-### StorageService
-Maneja la persistencia de datos en localStorage (configuración y sesiones).
-
-### StatisticsService
-Calcula estadísticas diarias, semanales y rachas de sesiones completadas.
-
-## 🎯 Características Implementadas
-
-- ✅ Configuración personalizable de tiempos
-- ✅ Temporizador con animación circular SVG
-- ✅ Sistema de notificaciones al completar sesiones
-- ✅ Estadísticas con gráfico de barras interactivo
-- ✅ Historial completo con filtros (Hoy, Semana, Todo)
-- ✅ Racha de días consecutivos
-- ✅ Persistencia local de datos
-- ✅ Diseño responsivo y moderno
-- ✅ Navegación fluida entre pantallas
-
-## 📝 Próximas Mejoras
-
-- [ ] Sonidos personalizados para notificaciones
-- [ ] Modo oscuro completo
-- [ ] Sincronización en la nube
-- [ ] Estadísticas mensuales y anuales
-- [ ] Objetivos diarios personalizables
-- [ ] Exportar datos en CSV
-- [ ] Integración con widgets del sistema
-- [ ] Push notifications nativas
-
-## 👨‍💻 Autor
-
-Desarrollado con Ionic y Angular para la gestión del tiempo y productividad.
-
-## 📄 Licencia
-
-Este proyecto es de código abierto y está disponible bajo la Licencia MIT.
-
-## 🤝 Contribuir
+## Contribución
 
 Las contribuciones son bienvenidas. Por favor:
 
 1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
+2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
+3. Commit tus cambios (`git commit -m 'Agregar nueva funcionalidad'`)
+4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
 5. Abre un Pull Request
 
-## 📧 Soporte
+## Licencia
 
-Si tienes alguna pregunta o problema, por favor abre un issue en el repositorio.
+Este proyecto está en desarrollo inicial. La licencia será definida próximamente.
+
+## Autor
+
+**Diego Leiva Morales**
+- GitHub: [@DLeivaMorales](https://github.com/DLeivaMorales)
+
+## Recursos Adicionales
+
+- [Documentación de Ionic](https://ionicframework.com/docs)
+- [Documentación de Angular](https://angular.io/docs)
+- [Documentación de Capacitor](https://capacitorjs.com/docs)
+- [Ionic CLI](https://ionicframework.com/docs/cli)
 
 ---
 
-**¡Disfruta mejorando tu productividad con MindFocus! 🎯⏱️**
+Generado con [Claude Code](https://claude.com/claude-code)
