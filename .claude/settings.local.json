@@ -9,7 +9,9 @@
       "Bash(git commit -m \"$(cat <<''EOF''\nImplementación completa de MindFocus - Aplicación Pomodoro\n\nEsta actualización incluye la implementación completa de la aplicación MindFocus \ncon todas las características de la técnica Pomodoro según el diseño especificado.\n\nCaracterísticas implementadas:\n- Pantalla de Configuración con tiempos personalizables\n- Temporizador activo con animación circular SVG\n- Sistema de notificaciones al completar sesiones\n- Estadísticas visuales con gráfico de barras semanal\n- Historial completo de sesiones con filtros\n- Cálculo de rachas de días consecutivos\n- Persistencia local de datos con localStorage\n- Navegación fluida entre todas las pantallas\n- Diseño responsivo con tema personalizado\n\nArchivos nuevos:\n- Modelos de datos (session.model.ts)\n- Servicios (timer, storage, statistics)\n- Páginas (timer, notification)\n- Estilos personalizados y tema de colores\n- README con documentación completa\n\nArchivos modificados:\n- Tabs actualizados con nueva navegación\n- Rutas configuradas para todas las páginas\n- Estilos globales con tema MindFocus\n- Páginas tab1, tab2, tab3 completamente rediseñadas\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git push:*)",
       "Bash(gh repo:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)"
     ],
     "deny": [],
     "ask": []
