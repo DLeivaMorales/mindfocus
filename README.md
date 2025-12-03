@@ -236,5 +236,3 @@ Este proyecto está en desarrollo inicial. La licencia será definida próximame
 - [Ionic CLI](https://ionicframework.com/docs/cli)
 
 ---
-
-Generado con [Claude Code](https://claude.com/claude-code)
