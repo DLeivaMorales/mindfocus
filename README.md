@@ -235,6 +235,4 @@ Este proyecto está en desarrollo inicial. La licencia será definida próximame
 - [Documentación de Capacitor](https://capacitorjs.com/docs)
 - [Ionic CLI](https://ionicframework.com/docs/cli)
 
----
 
-Generado con [Claude Code](https://claude.com/claude-code)
