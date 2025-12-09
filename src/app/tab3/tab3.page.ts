@@ -36,8 +36,14 @@ export class Tab3Page implements OnInit {
   }
 
   loadSessions() {
-    this.sessions = this.statisticsService.getAllSessions();
-    this.applyFilter();
+    try {
+      this.sessions = this.statisticsService.getAllSessions();
+      this.applyFilter();
+    } catch (error) {
+      console.error('Error loading sessions:', error);
+      this.sessions = [];
+      this.filteredSessions = [];
+    }
   }
 
   onFilterChange(event: any) {
@@ -46,37 +52,59 @@ export class Tab3Page implements OnInit {
   }
 
   applyFilter() {
-    const now = new Date();
-    const today = now.toDateString();
+    try {
+      const now = new Date();
+      const today = now.toDateString();
 
-    switch (this.selectedFilter) {
-      case 'today':
-        this.filteredSessions = this.sessions.filter(s =>
-          new Date(s.date).toDateString() === today
-        );
-        break;
-      case 'week':
-        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        this.filteredSessions = this.sessions.filter(s =>
-          new Date(s.date) >= weekAgo
-        );
-        break;
-      default:
-        this.filteredSessions = this.sessions;
+      switch (this.selectedFilter) {
+        case 'today':
+          this.filteredSessions = this.sessions.filter(s => {
+            try {
+              return s && s.date && new Date(s.date).toDateString() === today;
+            } catch {
+              return false;
+            }
+          });
+          break;
+        case 'week':
+          const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          this.filteredSessions = this.sessions.filter(s => {
+            try {
+              return s && s.date && new Date(s.date) >= weekAgo;
+            } catch {
+              return false;
+            }
+          });
+          break;
+        default:
+          this.filteredSessions = this.sessions.filter(s => s && s.date);
+      }
+    } catch (error) {
+      console.error('Error applying filter:', error);
+      this.filteredSessions = [];
     }
   }
 
-  formatDate(date: Date): string {
-    const d = new Date(date);
-    const today = new Date().toDateString();
-    const yesterday = new Date(Date.now() - 86400000).toDateString();
+  formatDate(date: Date | undefined): string {
+    try {
+      if (!date) return 'Fecha desconocida';
 
-    if (d.toDateString() === today) {
-      return 'Hoy';
-    } else if (d.toDateString() === yesterday) {
-      return 'Ayer';
-    } else {
-      return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+      const d = new Date(date);
+      if (isNaN(d.getTime())) return 'Fecha inválida';
+
+      const today = new Date().toDateString();
+      const yesterday = new Date(Date.now() - 86400000).toDateString();
+
+      if (d.toDateString() === today) {
+        return 'Hoy';
+      } else if (d.toDateString() === yesterday) {
+        return 'Ayer';
+      } else {
+        return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+      }
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Fecha inválida';
     }
   }
 
@@ -89,20 +117,36 @@ export class Tab3Page implements OnInit {
   }
 
   groupSessionsByDate(): { date: string, sessions: PomodoroSession[] }[] {
-    const groups: { [key: string]: PomodoroSession[] } = {};
+    try {
+      const groups: { [key: string]: PomodoroSession[] } = {};
 
-    this.filteredSessions.forEach(session => {
-      const dateKey = new Date(session.date).toDateString();
-      if (!groups[dateKey]) {
-        groups[dateKey] = [];
-      }
-      groups[dateKey].push(session);
-    });
+      this.filteredSessions.forEach(session => {
+        try {
+          if (!session || !session.date) return;
 
-    return Object.keys(groups).map(date => ({
-      date,
-      sessions: groups[date]
-    }));
+          const sessionDate = new Date(session.date);
+          if (isNaN(sessionDate.getTime())) return;
+
+          const dateKey = sessionDate.toDateString();
+          if (!groups[dateKey]) {
+            groups[dateKey] = [];
+          }
+          groups[dateKey].push(session);
+        } catch (error) {
+          console.error('Error processing session:', error, session);
+        }
+      });
+
+      return Object.keys(groups)
+        .sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
+        .map(date => ({
+          date,
+          sessions: groups[date]
+        }));
+    } catch (error) {
+      console.error('Error grouping sessions:', error);
+      return [];
+    }
   }
 }
 

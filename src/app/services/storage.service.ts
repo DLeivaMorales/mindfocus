@@ -33,22 +33,61 @@ export class StorageService {
   }
 
   getSessions(): PomodoroSession[] {
-    const sessions = localStorage.getItem(this.SESSIONS_KEY);
-    if (sessions) {
+    try {
+      const sessions = localStorage.getItem(this.SESSIONS_KEY);
+      if (!sessions) return [];
+
       const parsed = JSON.parse(sessions);
-      // Convertir strings de fecha a objetos Date
-      return parsed.map((s: any) => ({
-        ...s,
-        date: new Date(s.date)
-      }));
+      if (!Array.isArray(parsed)) {
+        console.error('Invalid sessions data: not an array');
+        return [];
+      }
+
+      // Convertir strings de fecha a objetos Date y validar
+      return parsed
+        .map((s: any) => {
+          try {
+            if (!s || typeof s !== 'object') return null;
+
+            const date = new Date(s.date);
+            if (isNaN(date.getTime())) {
+              console.warn('Invalid date in session:', s);
+              return null;
+            }
+
+            return {
+              id: s.id || '',
+              date: date,
+              startTime: s.startTime || '',
+              duration: Number(s.duration) || 0,
+              type: s.type === 'enfoque' || s.type === 'descanso' ? s.type : 'enfoque',
+              completed: Boolean(s.completed)
+            } as PomodoroSession;
+          } catch (error) {
+            console.error('Error parsing session:', error, s);
+            return null;
+          }
+        })
+        .filter((s): s is PomodoroSession => s !== null);
+    } catch (error) {
+      console.error('Error loading sessions from localStorage:', error);
+      return [];
     }
-    return [];
   }
 
   addSession(session: PomodoroSession): void {
-    const sessions = this.getSessions();
-    sessions.push(session);
-    this.saveSessions(sessions);
+    try {
+      if (!session || !session.date) {
+        console.error('Invalid session data:', session);
+        return;
+      }
+
+      const sessions = this.getSessions();
+      sessions.push(session);
+      this.saveSessions(sessions);
+    } catch (error) {
+      console.error('Error adding session:', error);
+    }
   }
 
   clearAllData(): void {

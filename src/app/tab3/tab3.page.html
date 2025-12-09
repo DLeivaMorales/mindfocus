@@ -33,7 +33,7 @@
       <div *ngFor="let group of groupSessionsByDate()" class="date-group">
         <div class="date-header">
           <ion-icon name="calendar"></ion-icon>
-          <span>{{ formatDate(group.sessions[0].date) }} - {{ group.sessions[0].date | date: 'd MMM yyyy' }}</span>
+          <span>{{ formatDate(group.sessions[0]?.date) }}</span>
         </div>
 
         <ion-list class="session-items">
